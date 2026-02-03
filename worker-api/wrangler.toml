@@ -9,19 +9,20 @@ main = "src/index.ts"
 
 # The compatibility date for your Worker. This is a required field.
 compatibility_date = "2024-02-12"
+compatibility_flags = ["nodejs_compat"]
 
 # Variables and secrets
 [vars]
-JWT_SECRET = "YOUR_SUPER_SECRET_KEY_REPLACE_IN_CLOUDFLARE_DASHBOARD_SECRETS"
+JWT_SECRET = "31ew19j09rf21d19"
 
 # D1 database bindings
 [[d1_databases]]
 binding = "D1_DATABASE" # In your code: env.D1_DATABASE
 database_name = "archive-editor-db"
-database_id = "<REPLACE_WITH_YOUR_D1_DATABASE_ID>"
+database_id = "6292565d-7117-423b-a527-b65b04407e95"
 
 # KV namespace bindings
 [[kv_namespaces]]
 binding = "KV_GAME_CONFIG" # In your code: env.KV_GAME_CONFIG
-id = "<REPLACE_WITH_YOUR_KV_NAMESPACE_ID>"
+id = "ba1c671dbe194c55a1f57211ce2bc6c3"
 preview_id = "<REPLACE_WITH_YOUR_KV_PREVIEW_ID>"
