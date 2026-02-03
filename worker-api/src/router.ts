@@ -9,6 +9,8 @@ import { handleLogin, handleUpgradeStat, handleGameProgress } from './handlers/u
 import { handleGachaPull } from './handlers/gacha';
 import { handleGetShopProducts, handleValidatePurchase, handleRedeemCoupon } from './handlers/shop';
 import { handleGetMail, handleClaimMail } from './handlers/mail';
+import { handleGetCodex, handleSubmitFragments } from './handlers/library';
+import { handleRebirth, handleUnlockTalent, handleGetTalentTree } from './handlers/soul';
 
 
 // Helper to add CORS headers to any response
@@ -60,6 +62,15 @@ router.post('/api/shop/validate_purchase', withAuth, handleValidatePurchase);
 router.post('/api/coupon/redeem', withAuth, handleRedeemCoupon);
 router.get('/api/mailbox/list', withAuth, handleGetMail);
 router.post('/api/mailbox/claim', withAuth, handleClaimMail);
+
+// Library Routes
+router.get('/api/library/codex', withAuth, handleGetCodex);
+router.post('/api/library/submit_fragments', withAuth, handleSubmitFragments);
+
+// Soul Routes
+router.post('/api/soul/rebirth', withAuth, handleRebirth);
+router.post('/api/soul/unlock_talent', withAuth, handleUnlockTalent);
+router.get('/api/soul/talents', withAuth, handleGetTalentTree);
 
 
 //================================================================

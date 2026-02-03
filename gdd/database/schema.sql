@@ -16,7 +16,8 @@ CREATE TABLE User_Stats (
     mileage_points INTEGER DEFAULT 0,
     is_banned INTEGER DEFAULT 0, -- 0 for false, 1 for true
     s_pity_counter INTEGER DEFAULT 0,
-    sss_pity_counter INTEGER DEFAULT 0
+    sss_pity_counter INTEGER DEFAULT 0,
+    soul_essence INTEGER DEFAULT 0
 );
 
 DROP TABLE IF EXISTS User_Active_Sessions;
@@ -56,3 +57,48 @@ CREATE TABLE User_Skin_Options (
 
 -- ... (다른 테이블들도 필요에 따라 유사하게 수정될 수 있습니다) ...
 -- For now, we focus on the tables used by the login logic.
+
+-- Layer 3: The Library - Monster Codex System
+DROP TABLE IF EXISTS Monsters;
+CREATE TABLE Monsters (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL UNIQUE,
+    description TEXT,
+    required_fragments INTEGER NOT NULL DEFAULT 100
+);
+
+DROP TABLE IF EXISTS User_Monster_Fragments;
+CREATE TABLE User_Monster_Fragments (
+    user_id TEXT NOT NULL,
+    monster_id INTEGER NOT NULL,
+    collected_fragments INTEGER NOT NULL DEFAULT 0,
+    is_completed INTEGER NOT NULL DEFAULT 0, -- 0 for false, 1 for true
+    PRIMARY KEY (user_id, monster_id),
+    FOREIGN KEY (user_id) REFERENCES User_Stats(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (monster_id) REFERENCES Monsters(id) ON DELETE CASCADE
+);
+
+-- Layer 4: The Soul - Prestige/Talent System
+DROP TABLE IF EXISTS Talents;
+CREATE TABLE Talents (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL UNIQUE,
+    description TEXT,
+    cost INTEGER NOT NULL DEFAULT 0,
+    prerequisite_talent_id INTEGER,
+    effect_type TEXT NOT NULL,
+    effect_value REAL NOT NULL,
+    FOREIGN KEY (prerequisite_talent_id) REFERENCES Talents(id) ON DELETE SET NULL
+);
+
+DROP TABLE IF EXISTS User_Talents;
+CREATE TABLE User_Talents (
+    user_id TEXT NOT NULL,
+    talent_id INTEGER NOT NULL,
+    unlocked_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, talent_id),
+    FOREIGN KEY (user_id) REFERENCES User_Stats(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (talent_id) REFERENCES Talents(id) ON DELETE CASCADE
+);
+
+

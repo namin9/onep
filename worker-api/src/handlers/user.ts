@@ -102,10 +102,51 @@ export const handleUpgradeStat = async (request: AuthenticatedRequest, env: Env)
 
 /**
  * Handler for POST /api/game/progress
- * This is a placeholder for the PoC.
+ * Calculates idle rewards and updates user progress.
  */
 export const handleGameProgress = async (request: AuthenticatedRequest, env: Env) => {
-    // In a real implementation, this would involve complex server-side validation
-    // of the progress claimed by the client, as discussed in the API design.
-    return new Response(JSON.stringify({ status: "success", message: "Progress recorded (PoC placeholder)." }), { headers: { 'Content-Type': 'application/json' } });
+    try {
+        const user_id = request.user.id;
+        const { client_highest_stage } = await request.json();
+
+        const user_stats: UserStats | null = await env.D1_DATABASE.prepare("SELECT * FROM User_Stats WHERE user_id = ?").bind(user_id).first();
+        if (!user_stats) {
+            return new Response(JSON.stringify({ status: "error", message: "User not found." }), { status: 404 });
+        }
+
+        const game_config_str = await env.KV_GAME_CONFIG.get("base_config");
+        const game_config = JSON.parse(game_config_str || '{"rubies_per_second_per_stage": 0.1}');
+        
+        const last_login = new Date(user_stats.last_login_at);
+        const now = new Date();
+        const offline_seconds = Math.floor((now.getTime() - last_login.getTime()) / 1000);
+
+        // Simple reward calculation: (Rubies per Second) * (Highest Stage) * (Offline Time)
+        // This is a basic model. A real game would have a more complex formula based on all stats.
+        const rubies_per_second = game_config.rubies_per_second_per_stage * user_stats.highest_stage;
+        const rubies_earned = Math.floor(rubies_per_second * offline_seconds);
+        
+        const updated_rubies = user_stats.rubies + rubies_earned;
+        const updated_highest_stage = Math.max(user_stats.highest_stage, client_highest_stage || 0);
+
+        await env.D1_DATABASE.prepare(
+            "UPDATE User_Stats SET rubies = ?, highest_stage = ?, last_login_at = ? WHERE user_id = ?"
+        ).bind(updated_rubies, updated_highest_stage, now.toISOString(), user_id).run();
+
+        return new Response(JSON.stringify({ 
+            status: "success", 
+            rewards: {
+                rubies_earned,
+                offline_seconds
+            },
+            updated_stats: {
+                rubies: updated_rubies,
+                highest_stage: updated_highest_stage
+            }
+        }), { headers: { 'Content-Type': 'application/json' } });
+
+    } catch (error) {
+        console.error("Game Progress Error:", error);
+        return new Response(JSON.stringify({ status: "error", message: "Internal Server Error" }), { status: 500 });
+    }
 };
