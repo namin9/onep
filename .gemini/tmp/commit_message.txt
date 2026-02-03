@@ -1,0 +1,24 @@
+feat: Implement core game systems and update test client
+
+This commit introduces significant progress in the "Archive Editor" idle game development by implementing key GDD layers and enhancing the test client.
+
+- **Backend (worker-api):**
+  - Implemented initial `handleGameProgress` logic for idle rewards.
+  - Designed and implemented "Library" system (Layer 3):
+    - Added `Monsters` and `User_Monster_Fragments` tables to `gdd/database/schema.sql`.
+    - Created `library.ts` handler with `handleGetCodex` and `handleSubmitFragments`.
+    - Integrated Library routes (`/api/library/codex`, `/api/library/submit_fragments`).
+  - Designed and implemented "Soul" system (Layer 4):
+    - Added `soul_essence` to `User_Stats` and new `Talents`, `User_Talents` tables to `gdd/database/schema.sql`.
+    - Created `soul.ts` handler with `handleRebirth`, `handleUnlockTalent`, and `handleGetTalentTree`.
+    - Integrated Soul routes (`/api/soul/rebirth`, `/api/soul/unlock_talent`, `/api/soul/talents`).
+  - Confirmed existing robust implementations for `handleUpgradeStat` and `handleGachaPull`.
+  - Ensured `wrangler.toml` is configured for `archive-editor-db`.
+
+- **Frontend (client-test):**
+  - Overhauled `index.html` and `main.js` to create a comprehensive API test harness.
+  - Added UI and logic for Login, User Stats display, Game Progress, Stat Upgrades, Gacha Pulls.
+  - Integrated UI and logic for new Library features (Get Codex, Submit Fragments).
+  - Integrated UI and logic for new Soul features (Rebirth, Unlock Talent, Get Talent Tree).
+
+This allows for end-to-end testing of all core game mechanics implemented so far.
