@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#16213E"
+    android:padding="16dp"
+    tools:context=".ui.GachaFragment">
+
+    <TextView
+        android:id="@+id/gacha_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gacha Pull"
+        android:textSize="24sp"
+        android:textColor="#E94560"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/gacha_ink_display"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your Ink: 0"
+        android:textColor="#E0E0E0"
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/gacha_title"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <LinearLayout
+        android:id="@+id/gacha_pull_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/gacha_ink_display"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/button_gacha_1x"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pull 1x (100 Ink)"
+            android:backgroundTint="#E94560"
+            android:textColor="#FFFFFF"
+            android:layout_marginEnd="8dp"/>
+
+        <Button
+            android:id="@+id/button_gacha_10x"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pull 10x (1000 Ink)"
+            android:backgroundTint="#E94560"
+            android:textColor="#FFFFFF"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/gacha_results_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Last Pull Results:"
+        android:textColor="#E0E0E0"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/gacha_pull_buttons"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/gacha_results_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/gacha_pull_buttons"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/item_gacha_skin"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

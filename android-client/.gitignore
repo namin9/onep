@@ -1,0 +1,91 @@
+# Built application files
+*.apk
+*.ap_
+*.aab
+*.aar
+
+# Files for the ART/Dalvik VM
+*.dex
+
+# Java class files
+*.class
+
+# Generated files
+bin/
+gen/
+out/
+build/
+.gradle/
+.idea/
+.cxx/
+*.iml
+*.iws
+*.ipr
+
+# Local configuration file (sdk location, etc.)
+local.properties
+
+# Android Studio configuration files
+.externalNativeBuild/
+.metadata/
+.navigation/
+captures/
+external_build_files/
+
+# Gradle
+.gradle/
+.DS_Store
+
+# Keystore files
+*.jks
+*.keystore
+
+# External native build folder (CMake, NDK)
+.externalNativeBuild
+.cxx
+CMakeLists.txt.user
+
+# Annotation processing
+.apt_generated/
+
+# Google Services (Firebase)
+google-services.json
+
+# Crashlytics
+crashlytics-build.properties
+
+# AIDE files
+.aide
+
+# Yarn
+.yarn/
+yarn-error.log
+
+# Capacitor
+android/capacitor-android-plugins/src/main/java/com/getcapacitor/android/plugins/*.java
+android/capacitor-android-plugins/build
+android/capacitor-android-plugins/src/main/AndroidManifest.xml
+android/capacitor-android-plugins/gradle.properties
+
+# KMM shared module
+*.kpt
+.gradle/kotlin-dsl-accessors/
+
+# Gradle settings that are user-specific
+.gradle/
+
+# Android Studio local build variants (e.g. debug, release)
+app/build/
+
+# Android Studio user-specific files
+.idea/caches/build_file_checksums.xml
+.idea/workspace.xml
+
+# macOS specific files
+.DS_Store
+
+# Windows specific files
+Thumbs.db
+
+# Any .iml file
+*.iml

@@ -4,15 +4,169 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#1A1A2E"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello Archive Editor!"
+    <!-- Login Screen Layout -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/login_screen_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/app_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Archive Editor: Idle Game"
+            android:textSize="32sp"
+            android:textColor="#E94560"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/welcome_message"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:id="@+id/welcome_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome, Adventurer!"
+            android:textSize="20sp"
+            android:textColor="#E0E0E0"
+            app:layout_constraintBottom_toTopOf="@+id/login_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/app_title"
+            android:layout_marginBottom="32dp"/>
+
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start Game"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:textSize="18sp"
+            android:backgroundTint="#E94560"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toTopOf="@+id/login_status_text_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/welcome_message"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:id="@+id/login_status_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#E0E0E0"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_button" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Main Game Screen Layout (Initially Hidden) -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_game_screen_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Sidebar -->
+        <LinearLayout
+            android:id="@+id/sidebar_layout"
+            android:layout_width="120dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:background="#0F3460"
+            android:padding="8dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Player Info"
+                android:textSize="16sp"
+                android:textColor="#E94560"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView android:id="@+id/player_rubies" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Rubies: 0" android:textColor="#E0E0E0"/>
+            <TextView android:id="@+id/player_ink" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ink: 0" android:textColor="#E0E0E0"/>
+            <TextView android:id="@+id/player_soul_essence" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Essence: 0" android:textColor="#E0E0E0"/>
+            <!-- More player stats can go here -->
+
+            <Button
+                android:id="@+id/sidebar_rebirth_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Rebirth"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="#E94560"
+                android:textColor="#FFFFFF"/>
+
+            <Button
+                android:id="@+id/sidebar_progress_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Progress"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="#0F3460"
+                android:textColor="#FFFFFF"/>
+
+        </LinearLayout>
+
+        <!-- Main Content Area -->
+        <FrameLayout
+            android:id="@+id/main_content_frame"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+            app:layout_constraintStart_toEndOf="@+id/sidebar_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="#16213E">
+            <!-- Fragments will be loaded here -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select a section below"
+                android:textColor="#E0E0E0"
+                android:layout_gravity="center"
+                android:textSize="20sp"/>
+        </FrameLayout>
+
+        <!-- Bottom Navigation -->
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:menu="@menu/bottom_nav_menu"
+            android:background="#0F3460"
+            app:itemIconTint="@color/bottom_nav_item_color"
+            app:itemTextColor="@color/bottom_nav_item_color"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

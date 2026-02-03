@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#16213E"
+    android:padding="16dp"
+    tools:context=".ui.HomeFragment">
+
+    <TextView
+        android:id="@+id/text_view_stage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stage: 1"
+        android:textSize="24sp"
+        android:textColor="#E0E0E0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/text_view_rubies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rubies: 0"
+        android:textSize="20sp"
+        android:textColor="#FFD200"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_stage"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <TextView
+        android:id="@+id/text_view_ink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ink: 0"
+        android:textSize="20sp"
+        android:textColor="#800080"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_rubies"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/text_view_soul_essence"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Soul Essence: 0"
+        android:textSize="20sp"
+        android:textColor="#00FFFF"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_ink"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="4dp" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar_idle"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:max="100"
+        android:progress="0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_soul_essence" />
+
+    <TextView
+        android:id="@+id/text_view_idle_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Collecting idle rewards..."
+        android:textColor="#E0E0E0"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progress_bar_idle" />
+
+    <Button
+        android:id="@+id/button_collect_idle_rewards"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Collect Idle Rewards"
+        android:backgroundTint="#E94560"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_idle_status" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

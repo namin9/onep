@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@android:drawable/ic_menu_today"
+        android:title="Home" />
+    <item
+        android:id="@+id/navigation_upgrades"
+        android:icon="@android:drawable/ic_menu_upload"
+        android:title="Upgrades" />
+    <item
+        android:id="@+id/navigation_gacha"
+        android:icon="@android:drawable/ic_menu_gallery"
+        android:title="Gacha" />
+    <item
+        android:id="@+id/navigation_library"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="Library" />
+    <item
+        android:id="@+id/navigation_soul"
+        android:icon="@android:drawable/ic_menu_share"
+        android:title="Soul" />
+</menu>
