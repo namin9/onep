@@ -1,28 +1,39 @@
-/**
- * Welcome to Cloudflare Workers! This is your first worker.
- *
- * - Run `npm run dev` in your terminal to start a development server
- * - Open a browser tab at http://localhost:8787/ to see your worker in action
- * - Run `npm run deploy` to publish your worker
- *
- * Learn more at https://developers.cloudflare.com/workers/
- */
-
 import router from './router';
 import { Env } from './types';
 
-// Export a default object containing event handlers
 export default {
-	/**
-	 * The fetch handler is the main entry point for your Worker.
-	 * It receives all incoming HTTP requests.
-	 * @param request The incoming request.
-	 * @param env The environment bindings (D1, KV, secrets).
-	 * @param ctx The execution context.
-	 * @returns A Response object.
-	 */
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-		// Pass the request to our router to handle it.
-		return router.handle(request, env, ctx);
+        // Handle preflight (OPTIONS) requests first, as they don't need to go through the router.
+        if (request.method === 'OPTIONS') {
+            return new Response(null, {
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+                    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                },
+            });
+        }
+
+        let response;
+        try {
+            // Pass the request to our router to handle it.
+            response = await router.handle(request, env, ctx);
+        } catch (err) {
+            console.error('Fallback Error:', err);
+            response = new Response('Internal Server Error', { status: 500 });
+        }
+        
+        // Create a mutable copy of the response headers
+        const newHeaders = new Headers(response.headers);
+        
+        // Add CORS headers to every response.
+        newHeaders.set('Access-Control-Allow-Origin', '*');
+        newHeaders.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+
+        return new Response(response.body, {
+            status: response.status,
+            statusText: response.statusText,
+            headers: newHeaders
+        });
 	},
 };
