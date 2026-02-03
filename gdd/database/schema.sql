@@ -8,6 +8,7 @@ CREATE TABLE User_Stats (
     crit_chance_level INTEGER DEFAULT 1,
     crit_damage_level INTEGER DEFAULT 1,
     rubies INTEGER DEFAULT 0, -- Using INTEGER for broad compatibility
+    ink INTEGER DEFAULT 0,
     highest_stage INTEGER DEFAULT 1,
     last_login_at TEXT, -- Storing as ISO 8601 string
     total_spent REAL DEFAULT 0.0,
