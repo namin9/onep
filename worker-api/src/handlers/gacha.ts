@@ -1,5 +1,4 @@
 import { IRequest } from 'itty-router';
-import { v4 as uuidv4 } from 'uuid';
 import { Env, AuthenticatedRequest, UserStats } from '../types';
 
 // --- Helper Functions (would be in separate files in a larger project) ---
@@ -101,7 +100,7 @@ export const handleGachaPull = async (request: AuthenticatedRequest, env: Env) =
         
         const obtained_skins_with_options: any[] = [];
         for (const skin of pull_results) {
-            const skin_instance_id = uuidv4();
+            const skin_instance_id = crypto.randomUUID();
             statements.push(env.D1_DATABASE.prepare(
                 "INSERT INTO User_Skins (instance_id, user_id, skin_id) VALUES (?, ?, ?)"
             ).bind(skin_instance_id, user_id, skin.id));

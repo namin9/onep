@@ -1,9 +1,8 @@
 import { IRequest } from 'itty-router';
-import { sign } from 'jsonwebtoken';
-import { v4 as uuidv4 } from 'uuid';
+import jwt from '@tsndr/cloudflare-worker-jwt';
 import { Env, AuthenticatedRequest, UserStats } from '../types';
 
-// NOTE: In a real project, these would be in separate utility files.
+// NOTE: In a real project, this would be in a separate utility file.
 // Placeholder for Google Auth logic
 async function exchangeGoogleCodeForUserId(code: string): Promise<string | null> {
     // In a real implementation, this would make an HTTPS request to Google's OAuth2 servers.
@@ -13,11 +12,6 @@ async function exchangeGoogleCodeForUserId(code: string): Promise<string | null>
     }
     return null;
 }
-// Placeholder for JWT generation
-async function generateJWT(payload: object, secret: string): Promise<string> {
-    return sign(payload, secret);
-}
-
 
 /**
  * Handler for POST /api/user/login
@@ -49,15 +43,15 @@ export const handleLogin = async (request: IRequest, env: Env) => {
             await env.D1_DATABASE.prepare("UPDATE User_Stats SET last_login_at = ? WHERE user_id = ?").bind(current_time, user_id).run();
         }
 
-        const new_session_id = uuidv4();
+        const new_session_id = crypto.randomUUID();
         await env.D1_DATABASE.prepare(
             "INSERT INTO User_Active_Sessions (user_id, session_id, last_seen_at) VALUES (?, ?, ?) " +
             "ON CONFLICT(user_id) DO UPDATE SET session_id = excluded.session_id, last_seen_at = excluded.last_seen_at"
         ).bind(user_id, new_session_id, current_time).run();
 
-        const jwt = await generateJWT({ user_id, session_id: new_session_id, exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 7) }, env.JWT_SECRET);
+        const token = await jwt.sign({ user_id, session_id: new_session_id, exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 7) }, env.JWT_SECRET);
 
-        return new Response(JSON.stringify({ status: "success", jwt, user_data: { stats: user_stats }, game_config }), { headers: { 'Content-Type': 'application/json' } });
+        return new Response(JSON.stringify({ status: "success", jwt: token, user_data: { stats: user_stats }, game_config }), { headers: { 'Content-Type': 'application/json' } });
     } catch (error) {
         console.error("Login Error:", error);
         return new Response(JSON.stringify({ status: "error", message: "Internal Server Error" }), { status: 500 });

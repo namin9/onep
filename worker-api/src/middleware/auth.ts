@@ -1,5 +1,4 @@
-import { IRequest } from 'itty-router';
-import { verify } from 'jsonwebtoken';
+import jwt from '@tsndr/cloudflare-worker-jwt';
 import { Env, AuthenticatedRequest } from '../types';
 
 // Define the structure of the JWT payload
@@ -18,17 +17,22 @@ export const withAuth = async (request: AuthenticatedRequest, env: Env) => {
             return new Response(JSON.stringify({ status: "error", message: "Authorization header is missing or malformed." }), { status: 401, headers: { 'Content-Type': 'application/json' } });
         }
 
-        // 2. Extract the JWT
+        // 2. Extract and verify the JWT
         const token = authHeader.split(' ')[1];
+        const isValid = await jwt.verify(token, env.JWT_SECRET);
 
-        // 3. Verify the JWT
-        const decoded = await verify(token, env.JWT_SECRET) as JwtPayload;
-        if (!decoded || !decoded.user_id || !decoded.session_id) {
-            return new Response(JSON.stringify({ status: "error", message: "Invalid token payload." }), { status: 401, headers: { 'Content-Type': 'application/json' } });
+        if (!isValid) {
+            return new Response(JSON.stringify({ status: "error", message: "Invalid or expired token." }), { status: 401, headers: { 'Content-Type': 'application/json' } });
         }
 
-        const { user_id, session_id } = decoded;
+        // 3. Decode the token to get the payload
+        const { payload } = jwt.decode(token);
+        const { user_id, session_id } = payload as JwtPayload;
 
+        if (!user_id || !session_id) {
+            return new Response(JSON.stringify({ status: "error", message: "Invalid token payload." }), { status: 401, headers: { 'Content-Type': 'application/json' } });
+        }
+        
         // 4. Check the active session in the database
         const activeSession = await env.D1_DATABASE.prepare(
             "SELECT session_id FROM User_Active_Sessions WHERE user_id = ?"
@@ -59,10 +63,6 @@ export const withAuth = async (request: AuthenticatedRequest, env: Env) => {
         request.user = { id: user_id };
 
     } catch (error: any) {
-        // Handle specific JWT errors like expiration
-        if (error.name === 'TokenExpiredError') {
-             return new Response(JSON.stringify({ status: "error", message: "Token has expired.", error_code: "TOKEN_EXPIRED" }), { status: 401, headers: { 'Content-Type': 'application/json' } });
-        }
         console.error("Authentication Middleware Error:", error);
         return new Response(JSON.stringify({ status: "error", message: "Authentication failed." }), { status: 401, headers: { 'Content-Type': 'application/json' } });
     }
