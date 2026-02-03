@@ -8,7 +8,7 @@ name = "archive-editor-api"
 main = "src/index.ts"
 
 # The compatibility date for your Worker. This is a required field.
-compatibility_date = "2024-02-12"
+compatibility_date = "2024-03-01"
 compatibility_flags = ["nodejs_compat"]
 
 # Variables and secrets
