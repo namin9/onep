@@ -1,17 +1,45 @@
-import { Router, IRequest } from 'itty-router';
+import { Router, IRequest, error, json } from 'itty-router';
 import { Env, AuthenticatedRequest } from './types';
 
 // Middleware
 import { withAuth } from './middleware/auth';
 
-// Handlers (we will create these files next)
+// Handlers
 import { handleLogin, handleUpgradeStat, handleGameProgress } from './handlers/user';
 import { handleGachaPull } from './handlers/gacha';
 import { handleGetShopProducts, handleValidatePurchase, handleRedeemCoupon } from './handlers/shop';
 import { handleGetMail, handleClaimMail } from './handlers/mail';
 
-// Create a new router
-const router = Router<AuthenticatedRequest, [Env]>();
+// CORS Preflight-handling middleware
+const withCORS = (request: IRequest) => {
+  const headers = {
+    'Access-Control-Allow-Origin': '*', // Allow any origin
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  };
+
+  if (request.method === 'OPTIONS') {
+    return new Response(null, { headers });
+  }
+}
+
+// Helper to add CORS headers to a response
+const corsify = (response: Response) => {
+    if (response.headers.get('Access-Control-Allow-Origin')) {
+        return response; // Headers already present
+    }
+    response.headers.set('Access-control-allow-origin', '*');
+    return response;
+}
+
+const router = Router<AuthenticatedRequest, [Env]>({
+    before: [withCORS], // Apply CORS middleware to all requests
+    finally: [ (response) => corsify(response) ], // Add CORS headers to all final responses
+    catch: (err) => {
+        console.error(err);
+        return corsify(error(500, 'Internal Server Error'));
+    }
+});
 
 //================================================================
 // Public Routes (No authentication required)
@@ -22,21 +50,11 @@ router.post('/api/user/login', handleLogin);
 //================================================================
 // Authenticated Routes (withAuth middleware is applied)
 //================================================================
-// All routes defined below will first pass through the 'withAuth' middleware.
-// If authentication fails, the middleware will return an error and the actual handler won't be called.
-
-// -- User Progression --
 router.post('/api/game/progress', withAuth, handleGameProgress);
 router.post('/api/user/upgrade_stat', withAuth, handleUpgradeStat);
-
-// -- Gacha --
 router.post('/api/gacha/pull', withAuth, handleGachaPull);
-
-// -- Shop & Monetization --
 router.get('/api/shop/products', withAuth, handleGetShopProducts);
 router.post('/api/shop/validate_purchase', withAuth, handleValidatePurchase);
-
-// -- Operations --
 router.post('/api/coupon/redeem', withAuth, handleRedeemCoupon);
 router.get('/api/mailbox/list', withAuth, handleGetMail);
 router.post('/api/mailbox/claim', withAuth, handleClaimMail);
@@ -45,6 +63,6 @@ router.post('/api/mailbox/claim', withAuth, handleClaimMail);
 //================================================================
 // 404 Handler for all other requests
 //================================================================
-router.all('*', () => new Response('Not Found.', { status: 404 }));
+router.all('*', () => error(404, 'Not Found.'));
 
 export default router;
