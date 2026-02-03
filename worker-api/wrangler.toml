@@ -1,0 +1,27 @@
+# This is a TOML file, used for configuring Wrangler.
+# For more information, see https://developers.cloudflare.com/workers/wrangler/configuration/
+
+# The name of your Worker.
+name = "archive-editor-api"
+
+# The entry-point for your Worker, relative to the project root.
+main = "src/index.ts"
+
+# The compatibility date for your Worker. This is a required field.
+compatibility_date = "2024-02-12"
+
+# Variables and secrets
+[vars]
+JWT_SECRET = "YOUR_SUPER_SECRET_KEY_REPLACE_IN_CLOUDFLARE_DASHBOARD_SECRETS"
+
+# D1 database bindings
+[[d1_databases]]
+binding = "D1_DATABASE" # In your code: env.D1_DATABASE
+database_name = "archive-editor-db"
+database_id = "<REPLACE_WITH_YOUR_D1_DATABASE_ID>"
+
+# KV namespace bindings
+[[kv_namespaces]]
+binding = "KV_GAME_CONFIG" # In your code: env.KV_GAME_CONFIG
+id = "<REPLACE_WITH_YOUR_KV_NAMESPACE_ID>"
+preview_id = "<REPLACE_WITH_YOUR_KV_PREVIEW_ID>"
