@@ -26,36 +26,22 @@ export interface UserStats {
     attack_speed_level: number;
     crit_chance_level: number;
     crit_damage_level: number;
-    rubies: number; // Note: D1 returns numbers, but for very large numbers, consider bigint/string
+    rubies: number;
     highest_stage: number;
     last_login_at: string; // ISO 8601 string format
-    
-    // Monetization & Ops fields
     total_spent: number;
-    has_ad_free: boolean;
+    has_ad_free: 0 | 1; // 0 for false, 1 for true
     mileage_points: number;
-    is_banned: boolean;
-
-    // Gacha pity counters
+    is_banned: 0 | 1; // 0 for false, 1 for true
     s_pity_counter: number;
     sss_pity_counter: number;
 }
 
-export interface Skin {
-    id: number;
-    name: string;
-    grade: 'C' | 'B' | 'A' | 'S' | 'SS' | 'SSS';
-    source_novel: string;
-    base_effect_type: string;
-    base_effect_value: number;
-    set_id: number | null;
-}
-
 export interface UserSkin {
-    instance_id: string; // Using string for UUID
+    instance_id: string;
     user_id: string;
     skin_id: number;
-    is_equipped: boolean;
+    is_equipped: 0 | 1; // 0 for false, 1 for true
     level: number;
 }
 

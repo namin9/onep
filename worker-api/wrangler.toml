@@ -2,7 +2,7 @@
 # For more information, see https://developers.cloudflare.com/workers/wrangler/configuration/
 
 # The name of your Worker.
-name = "archive-editor-api"
+name = "onep"
 
 # The entry-point for your Worker, relative to the project root.
 main = "src/index.ts"
