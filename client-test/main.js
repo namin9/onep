@@ -84,5 +84,5 @@ document.getElementById('gachaPullBtn').addEventListener('click', () => {
 });
 
 // Set default worker URL for convenience (user can change it)
-document.getElementById('workerUrl').value = 'https://onep.YOUR_PAGES_PROJECT.pages.dev';
+document.getElementById('workerUrl').value = 'https://onep.koolee1372-73d.workers.dev';
 
